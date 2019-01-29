@@ -260,6 +260,7 @@
         - property函数比较简单
         - property（fget，fset，fdel，doc）
 
+
         
         # 使用函数改变属性
         # 属性的使用示例
@@ -267,27 +268,25 @@
         #学生具有Student.name属性
         #但name格式并不统一
         #可以用增加一个函数，然后自己调用的方式，但很蠢
-        class Student():
-            def __init__(self,name,age):
-                self.name = name
-                self.age = age
-                
-                self.setName(name)
-            # 介绍自己
-            def intro(self):
-                print("hai,my name is {0}".format(self.name))
-            def setName(self,name):
-                self.name = name.upper()
-                
-        s1 = Student("Lin",18)
-        s2 = Student("aoxi",20)
-            
-        s1.intro()
-        s2.intro()
+            class Student():
+                def __init__(self,name,age):
+                    self.name = name
+                    self.age = age
+                    self.setName(name)
+                # 介绍自己
+                def intro(self):
+                    print("hai,my name is {0}".format(self.name))
+                def setName(self,name):
+                    self.name = name.upper()
+            s1 = Student("Lin",18)
+            s2 = Student("aoxi",20)
+            s1.intro()
+            s2.intro()
      
-    输出结果：
-    hai,my name is LIN
-    hai,my name is AOXI
+            输出结果：
+            hai,my name is LIN
+            hai,my name is AOXI
+            
     
 - 使用property函数改变属性
         

@@ -1,10 +1,9 @@
-'''
-属性的使用示例1
-创建Student类，描述学生
-学生具有Student.name属性
-但name格式并不统一
-可以用增加一个函数，然后自己调用的方式，但很蠢
-'''
+#属性的使用示例1
+#创建Student类，描述学生
+#学生具有Student.name属性
+#但name格式并不统一
+#可以用增加一个函数，然后自己调用的方式，但很蠢
+
 class Student():
     def __init__(self,name,age):
         self.name = name

@@ -23,4 +23,3 @@ s2 = Student("aoxi",20)
 
 s1.intro()
 s2.intro()
-

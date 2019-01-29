@@ -244,11 +244,15 @@
 - delattr： delattr attribute
 - dir: 获取对象的成员列表
 
-## 6.5 类的成员描述符（属性）
+# 7 类的成员描述符（属性）
 - 类的成员描述符是为了在类中对类的成员属性进行相关操作而创建的一种方式
     - get：获取属性的操作
     - set：修改或添加属性操作
     - delete：删除的操作
+- 属性的三种用法：
+    - 赋值
+    - 读取
+    - 删除
 - 使用类的成员描述符，有三种方法：
     - 使用类实现描述器
     - 使用属性修饰符
@@ -259,29 +263,29 @@
         
      #使用函数改变属性
      '''
-    属性的使用示例
-    创建Student类，描述学生
-    学生具有Student.name属性
-    但name格式并不统一
-    可以用增加一个函数，然后自己调用的方式，但很蠢
-    '''
-    class Student():
-        def __init__(self,name,age):
-            self.name = name
-            self.age = age
-
-            self.setName(name)
-        # 介绍自己
-        def intro(self):
-            print("hai,my name is {0}".format(self.name))
-        def setName(self,name):
-            self.name = name.upper()
-
-    s1 = Student("Lin",18)
-    s2 = Student("aoxi",20)
-
-    s1.intro()
-    s2.intro()
+     属性的使用示例
+     创建Student类，描述学生
+     学生具有Student.name属性
+     但name格式并不统一
+     可以用增加一个函数，然后自己调用的方式，但很蠢
+     '''
+        class Student():
+            def __init__(self,name,age):
+                self.name = name
+                self.age = age
+                
+                self.setName(name)
+            # 介绍自己
+            def intro(self):
+                print("hai,my name is {0}".format(self.name))
+            def setName(self,name):
+                self.name = name.upper()
+                
+        s1 = Student("Lin",18)
+        s2 = Student("aoxi",20)
+            
+        s1.intro()
+        s2.intro()
      
     输出结果：
     hai,my name is LIN
@@ -297,17 +301,17 @@
         x = property（fget，fset，fdel，doc）
         '''
         class Person():
-            # 函数名称可以任意取
+            # 此功能，是对类变量进行读取操作的时候应该执行的函数功能
             def fget(self):
                 return self._name * 2
-
+            # 模拟的是对变量进行写操作的时候执行的功能
             def fset(self,name):
                 self._name = name.upper()
-
+            # 模拟的是删除变量的时候进行的操作
             def fdel(self):
                 self._name = "noname"
-
-            name = property(fget,fset,fdel,"对name进行以下操作")
+            # property的四个参数是固定的
+            name = property(fget,fset,fdel,"说明")
 
         p1 = Person()
         p1.name = "lin"
@@ -316,16 +320,188 @@
         输出结果：
         LINLIN
      
-## 6.6 类的内置属性
+## 7.1 类的内置属性
     __dict__ ： 以字典的方式显示类的成员组成
     __doc__ ： 获取类的文档信息
     __name__ ： 获取类的名称，在模块中使用则获取模块的名称
-    __bases__： 获取某个的所有父类，以元组方式显示     
-     
-     
-     
-     
-     
-     
-     
-     
+    __bases__： 获取某个的所有父类，以元组方式显示    
+    
+# 8. 类的常用魔术方法
+- 魔术方法就是不需要人为调用的方法，基本是在特定的时刻自动触发 
+- 魔术方法的统一特征，方法名被前后各两个下划线包裹
+- ` __init__ `:构造函数就是典型的魔术方法
+- ` __new__`:对象实例化方法，此函数比较特殊，一般不需要使用
+- ` __call__ `:对象当函数使用时触发
+
+        #__call__示例
+        class A():
+            def __init__(self,name = 0):
+                print("hahaha")
+            def __call__(self):
+                print("我被调用了")
+        a = A()
+        a()  #把对象当作函数调用
+        
+        输出结果：
+        hahaha
+        我被调用了
+- 更多魔法函数可参考：https://tulingxueyuan.gitbooks.io/python/content/docs/2%E3%80%81Python%E9%AB%98%E7%BA%A7/%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0%E6%A6%82%E8%BF%B0.html
+
+# 9. 类和对象的三种方法
+- 实例方法
+    - 需要实例化对象才能使用的方法，使用过程中可能需要截止对象的其他对象的方法完成
+- 静态方法
+    - 不需要实例化，通过类直接访问
+- 类方法
+    - 不需要实例化
+- 代码示例：
+
+        '''
+        类和对象的三种方法案例
+        '''
+        class Person():
+            def eat(self):
+                print(self)
+                print("eating...")
+
+            # 类方法,类方法的第一个参数，一般为cls
+            @classmethod
+            def play(cls):
+                print(cls)
+                print("playing...")
+
+            # 静态方法，不需要用第一个参数表示自身或类
+            @staticmethod
+            def say():
+                print("saying...")
+
+        lin = Person()
+
+        # 实例方法
+        lin.eat()
+        # 类方法
+        Person.play()
+        lin.play()
+        # 静态方法
+        Person.say()
+        lin.say()
+        
+        输出结果：
+        <__main__.Person object at 0x0000011963DF85C0>
+        eating...
+        <class '__main__.Person'>
+        playing...
+        <class '__main__.Person'>
+        playing...
+        saying...
+        saying...
+        
+# 10. 抽象类（软件工程类）
+- 抽象方法：没有具体实现内容的方法称为抽象方法
+- 抽象方法的主要意义是规范子类的行为和接口
+- 抽象类的使用需要借助abc模块
+
+        import abc
+    
+- 抽象类：包含抽象方法的类叫抽象类，通常称为abc类
+- 抽象类的使用
+    - 抽象类可以包含抽象方法，也可以包含具体方法
+    - 抽象类中可以有方法也可以有属性
+    - 抽象类不允许直接实例化
+    - 必须继承才能使用，且继承的子类必须实现所有继承来的抽象方法
+    - 假定子类没有实现所有继承的抽象方法，则子类也不能实例化
+    - 抽象类的主要作用是设定类的标准，以便于开发的时候有统一的规范
+    - 使用示例:
+    
+            #抽象类的实现
+            import abc
+            class Human(metaclass=abc.ABCMeta):
+                # 定义一个抽象方法
+                @abc.abstractmethod
+                def smoking(self):
+                    pass
+                # 定义类抽象方法
+                @abc.abstractclassmethod
+                def drink():
+                    pass
+                # 定义静态抽象方法
+                @abc.abstractstaticmethod
+                def play():
+                    pass
+                # 普通的具体方法
+                def sleep(self):
+                    print("sleeping...")
+
+# 11. 自定义类
+- 类其实是一个类定义和各种方法的组合
+- 可以定义类和函数，然后自己通过类直接赋值
+
+        # 自己组装一个类
+        class A():
+            pass
+
+        def say(self):
+            print("123aaa")
+
+        say(1)
+        # 函数名当作变量用
+        A.say = say
+        a = A()
+        a.say()
+        
+        输出结果：
+        123aaa
+        123aaa
+        
+- 可以借助MethodType实现
+
+        # 通过MethodType组装一个类
+        from types import MethodType
+        class A():
+            pass
+            
+        def say(self):
+            print("123aaa")
+        
+        a = A()
+        a.say = MethodType(say,A)
+        a.say()
+        
+- 借助于type实现
+
+        # 通过type组装一个类
+        # 先定义类应该具有的成员函数
+        def say(self):
+            print("123aaa")
+        def talk(self):
+            print("talking...")
+        # 用type来创建一个类，详细使用方法help（type）
+        A = type("Aname",(object,),{"class_say":say,"class_talk":talk})
+        # 然后可以正常访问此类
+        a = A()
+        a.class_say()
+        a.class_talk()
+        
+        输出结果：
+        123aaa
+        talking...
+        
+- 利用元类实现 MetaClass
+    - 元类是类
+    - 用来创建别的类，元类的写法是固定的，必须继承自type
+    
+    
+            # 元类写法是固定的，必须继承自type，命名一般以MetaClass结尾
+            class TulignMetaClass(type):
+                def __new__(cls, name, bases,attrs):
+                    #自己的业务处理
+                    print("我是元类")
+                    attrs['id'] = "00000"
+                    attrs['addr'] = "四川德阳"
+                    return type.__new__(cls, name, bases, attrs)
+            # 元类定义完就可以使用，使用注意写法
+            class Teacher(object,metaclass=TulignMetaClass):
+                pass
+            # 使用
+            t = Teacher()
+            t.__dict__
